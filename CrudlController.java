@@ -1,6 +1,6 @@
 import crudl.model.*;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.Instant;
@@ -10,10 +10,10 @@ import java.time.Instant;
 //
 public class CrudlController implements Crudl {
    
-    static Map<String,Item> storage = new HashMap<String,Item>();
+    static Map<String,Item> storage = new TreeMap<String,Item>();
     
     public CreateItemResponse createItem(CreateItemRequest req) {
-        Item item = req.getItem();
+        Item item = req.getEntity();
         String key = item.getId();
         synchronized (storage) {
             if (storage.containsKey(key)) {
@@ -22,7 +22,7 @@ public class CrudlController implements Crudl {
             item = Item.builder().id(key).modified(Instant.now()).data(item.getData()).build();
             storage.put(key, item);
         }
-        return CreateItemResponse.builder().item(item).build();
+        return CreateItemResponse.builder().entity(item).build();
     }
     
     public GetItemResponse getItem(GetItemRequest req) {
@@ -39,12 +39,12 @@ public class CrudlController implements Crudl {
                     throw new NotModified("Item has not been modified");
                 }
             }
-            return GetItemResponse.builder().item(item).modified(item.getModified()).build();
+            return GetItemResponse.builder().entity(item).modified(item.getModified()).build();
         }
     }
     
     public PutItemResponse putItem(PutItemRequest req) {
-        Item item = req.getItem();
+        Item item = req.getEntity();
         String key = item.getId();
         synchronized (storage) {
             if (!storage.containsKey(key)) {
@@ -52,7 +52,7 @@ public class CrudlController implements Crudl {
             }
             item = Item.builder().id(key).modified(Instant.now()).data(item.getData()).build();
             storage.put(key, item);
-            return PutItemResponse.builder().item(item).build();
+            return PutItemResponse.builder().entity(item).build();
         }
     }
     
@@ -88,7 +88,7 @@ public class CrudlController implements Crudl {
             }
             lst.add(e.getValue());
         }
-        return ListItemsResponse.builder().items(ItemListing.builder().items(lst).next(next).build()).build();
+        return ListItemsResponse.builder().entity(ItemListing.builder().items(lst).next(next).build()).build();
     }
     
 }
