@@ -34,7 +34,7 @@ clean::
 
 swagger: generated/crudl.json
 	@echo browse to http://localhost:8080/index.html
-	local-swagger crudl_oas.json
+	local-swagger generated/crudl.json
 
 generated/crudl.json: crudl.sadl
 	sadl -g openapi crudl.sadl > generated/crudl.json
