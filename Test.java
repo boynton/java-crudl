@@ -36,7 +36,7 @@ public class Test implements ClientConfig {
     }
     @Override
     public String getTarget() {
-        return "http://localhost:8080/";
+        return "http://localhost:8000/";
     }
     
 }

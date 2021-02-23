@@ -31,3 +31,10 @@ generated:
 
 clean::
 	rm -rf generated
+
+swagger: generated/crudl.json
+	@echo browse to http://localhost:8080/index.html
+	local-swagger crudl_oas.json
+
+generated/crudl.json: crudl.sadl
+	sadl -g openapi crudl.sadl > generated/crudl.json
